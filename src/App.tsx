@@ -15,7 +15,7 @@ export const goodsFromServer = [
   'Garlic',
 ];
 
-enum ButtonStatus {
+enum SortType {
   Default,
   Alph,
   Length,
@@ -23,31 +23,29 @@ enum ButtonStatus {
 
 export const App: React.FC = () => {
   const [goods, setGoods] = useState<string[]>([...goodsFromServer]);
-  const [buttonStatus, setButtonStatus] = useState<ButtonStatus>(
-    ButtonStatus.Default,
-  );
+  const [buttonStatus, setButtonStatus] = useState<SortType>(SortType.Default);
   const [isReversed, setIsReversed] = useState<boolean>(false);
 
   const isInitial =
     goods.length === goodsFromServer.length &&
     goods.every((g, i) => g === goodsFromServer[i]);
 
-  const aplyReverseIfNedded = (arr: string[]) => {
-    return isInitial ? [...arr].reverse() : arr;
+  const aplyReverseIfNeeded = (arr: string[]) => {
+    return isReversed ? [...arr].reverse() : arr;
   };
 
   const sortAlph = () => {
     const sorted = [...goodsFromServer].sort((a, b) => a.localeCompare(b));
 
-    setGoods(aplyReverseIfNedded(sorted));
-    setButtonStatus(ButtonStatus.Alph);
+    setGoods(aplyReverseIfNeeded(sorted));
+    setButtonStatus(SortType.Alph);
   };
 
   const sortByLength = () => {
     const sorted = [...goodsFromServer].sort((a, b) => a.length - b.length);
 
-    setGoods(aplyReverseIfNedded(sorted));
-    setButtonStatus(ButtonStatus.Length);
+    setGoods(aplyReverseIfNeeded(sorted));
+    setButtonStatus(SortType.Length);
   };
 
   const reverse = () => {
@@ -57,7 +55,8 @@ export const App: React.FC = () => {
 
   const reset = () => {
     setGoods([...goodsFromServer]);
-    setButtonStatus(ButtonStatus.Default);
+    setIsReversed(false);
+    setButtonStatus(SortType.Default);
   };
 
   return (
@@ -66,7 +65,7 @@ export const App: React.FC = () => {
         <button
           type="button"
           onClick={sortAlph}
-          className={`button is-info ${buttonStatus === ButtonStatus.Alph ? '' : 'is-light'}`}
+          className={`button is-info ${buttonStatus === SortType.Alph ? '' : 'is-light'}`}
         >
           Sort alphabetically
         </button>
@@ -74,7 +73,7 @@ export const App: React.FC = () => {
         <button
           type="button"
           onClick={sortByLength}
-          className={`button is-success ${buttonStatus === ButtonStatus.Length ? '' : 'is-light'}`}
+          className={`button is-success ${buttonStatus === SortType.Length ? '' : 'is-light'}`}
         >
           Sort by length
         </button>
@@ -99,15 +98,13 @@ export const App: React.FC = () => {
       </div>
 
       <ul>
-        <ul>
-          {goods.map(good => {
-            return (
-              <li data-cy="Good" key={good}>
-                {good}
-              </li>
-            );
-          })}
-        </ul>
+        {goods.map(good => {
+          return (
+            <li data-cy="Good" key={good}>
+              {good}
+            </li>
+          );
+        })}
       </ul>
     </div>
   );
