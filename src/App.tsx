@@ -30,21 +30,21 @@ export const App: React.FC = () => {
     goods.length === goodsFromServer.length &&
     goods.every((g, i) => g === goodsFromServer[i]);
 
-  const aplyReverseIfNeeded = (arr: string[]) => {
+  const applyReverseIfNeeded = (arr: string[]) => {
     return isReversed ? [...arr].reverse() : arr;
   };
 
   const sortAlph = () => {
     const sorted = [...goodsFromServer].sort((a, b) => a.localeCompare(b));
 
-    setGoods(aplyReverseIfNeeded(sorted));
+    setGoods(applyReverseIfNeeded(sorted));
     setButtonStatus(SortType.Alph);
   };
 
   const sortByLength = () => {
     const sorted = [...goodsFromServer].sort((a, b) => a.length - b.length);
 
-    setGoods(aplyReverseIfNeeded(sorted));
+    setGoods(applyReverseIfNeeded(sorted));
     setButtonStatus(SortType.Length);
   };
 
